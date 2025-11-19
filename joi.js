@@ -11,7 +11,7 @@ export const sign_up = joi.object(
     }
 )
 
-//login
+//login validation
 export const login = joi.object(
     {
         email_id : joi.string().email().required(),
