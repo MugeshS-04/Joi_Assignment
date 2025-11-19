@@ -16,7 +16,10 @@ app.post("/signup", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-    
+    const login_obj = req.body
+    let valid = login.validate(login_obj)
+    if(valid.error) res.json({success : false, message : valid.error.message})
+    res.json({success : true, message : "Login Successfull"})
 })
 
 app.get("/", (req,res) => { 
