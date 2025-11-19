@@ -1,7 +1,28 @@
 {
+  "type": "module",
   "dependencies": {
     "chance": "^1.1.13",
     "express": "^5.1.0",
-    "joi": "^18.0.1"
+    "joi": "^18.0.1",
+    "nodemon": "^3.1.11"
+  },
+  "name": "joi_validation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "joi.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MugeshS-04/Joi_Assignment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MugeshS-04/Joi_Assignment/issues"
+  },
+  "homepage": "https://github.com/MugeshS-04/Joi_Assignment#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   }
 }

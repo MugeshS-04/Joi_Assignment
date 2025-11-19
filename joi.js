@@ -1,20 +1,20 @@
-const joi = require('joi')
+import Joi from 'joi'
 
 //sign_up validation
-export const sign_up = joi.object(
+export const sign_up = Joi.object(
     {
-        name : joi.string().required(),
-        age : joi.number().integer().min(18).required(),
-        email_id : joi.string().email().required(),
-        pass : joi.string().pattern(new RegExp("")).required(),
-        conf_pass : joi.ref(pass)
+        name : Joi.string().required(),
+        age  : Joi.number().integer().min(18).required(),
+        email_id : Joi.string().email().required(),
+        pass : Joi.string().pattern(new RegExp("")).required(),
+        conf_pass : Joi.ref("pass"),
     }
 )
 
 //login validation
-export const login = joi.object(
+export const login = Joi.object(
     {
-        email_id : joi.string().email().required(),
-        pass : joi.string().min(5).required(),
+        email_id : Joi.string().email().required(),
+        pass : Joi.string().min(5).required(),
     }
 )
