@@ -3,7 +3,6 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from "dotenv"
-import cookieParser from 'cookie-parser'
 
 dotenv.config()
 
@@ -16,8 +15,6 @@ app.use(express.urlencoded({ extended: true }))
 
 let User_Map = new Map()
 let User_id = 1
-
-app.use(cookieParser())
 
 app.post("/signup", async (req, res) => {
 
@@ -39,14 +36,7 @@ app.post("/signup", async (req, res) => {
 
     const token = jwt.sign({key : req.body.email_id}, process.env.JWT_SIGN)
 
-    res.cookie('token', token, {
-        httpOnly : true,
-        secure : true, //true -> https
-        sameSite : false, // to prevent CSRF
-        maxAge : 24 * 60 * 60 * 1000
-    })
-
-    res.json({success : true, message : "sign-up completed"})
+    res.json({success : true, message : "sign-up completed", token : token})
 })
 
 app.post("/login", async (req, res) => {
@@ -62,18 +52,12 @@ app.post("/login", async (req, res) => {
         let obj = User_Map.get(key)
         
         const isMatch = await bcrypt.compare(req.body.pass, obj.pass)
+        
         if(isMatch)
         {
             const token = jwt.sign({key : req.body.email_id}, process.env.JWT_SIGN)
-
-            res.cookie('token', token, {
-                httpOnly : true,
-                secure : true, //true -> https
-                sameSite : false, // to prevent CSRF
-                maxAge : 24 * 60 * 60 * 1000
-            })
             
-            res.json({success : true, message : "Login Successfull"})
+            res.json({success : true, message : "Login Successfull", token : token})
         }
         else
         {
@@ -88,7 +72,9 @@ app.post("/login", async (req, res) => {
 
 app.get("/getdetails", async (req, res) => {
     
-    let { token } = req.cookies
+    const authheader = req.headers['authorization']
+    
+    const token = authheader.split(" ")[1]
 
     const isvalid = jwt.verify(token, process.env.JWT_SIGN)
 
@@ -101,8 +87,12 @@ app.get("/getdetails", async (req, res) => {
     else
     {
         res.json({success : false, message : "Invalid token or expired"})
-    }
+    }  
+})
 
+app.get("/logout", (req, res) => {
+    res.clearCookie('token')
+    res.json({success : true, message : "Cleared the cookies"})
 })
 
 app.get("/", (req,res) => { 
